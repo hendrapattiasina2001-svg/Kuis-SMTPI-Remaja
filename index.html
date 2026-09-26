@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluasi SMTPI Remaja I</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box}body{margin:0;font-family:Poppins,Arial,sans-serif;background:#f3f7f4;color:#17251c}
+header{background:linear-gradient(135deg,#075e35,#159447);color:#fff;padding:22px 18px 70px;position:relative}
+.wrap{max-width:820px;margin:auto}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:#ffffff22;display:grid;place-items:center;font-size:25px}
+h1{font-size:23px;margin:0}.subtitle{opacity:.88;font-size:13px}
+.card{background:#fff;border-radius:20px;padding:25px;box-shadow:0 8px 35px #12331b16;margin-top:-42px;position:relative}
+label{display:block;font-size:14px;font-weight:600;margin:15px 0 7px}input{width:100%;padding:14px;border:1.5px solid #d7ded9;border-radius:12px;font:inherit;outline:none}input:focus{border-color:#159447}
+.btn{border:0;border-radius:12px;padding:14px 20px;font:600 15px Poppins;cursor:pointer}.primary{background:#159447;color:white;width:100%;margin-top:20px}.primary:hover{background:#0e7838}
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.info div{background:#f0f7f2;border-radius:12px;padding:11px;text-align:center;font-size:12px}.info b{display:block;font-size:15px;color:#075e35}
+.hidden{display:none}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:#65736a}.progress{height:9px;background:#e7ece9;border-radius:99px;margin:13px 0 25px;overflow:hidden}.progress i{display:block;height:100%;background:#159447;border-radius:99px;transition:.35s;width:0}
+.question{font-size:19px;line-height:1.55;font-weight:700;margin:10px 0 18px}.option{width:100%;display:flex;align-items:center;gap:13px;text-align:left;background:#fff;border:2px solid #e0e6e2;border-radius:14px;padding:14px;margin:10px 0;font:500 14px Poppins;cursor:pointer;transition:.2s}.letter{min-width:34px;height:34px;border-radius:10px;background:#eef3ef;display:grid;place-items:center;font-weight:700}.option:hover:not(:disabled){border-color:#54aa75;transform:translateY(-1px)}.option.correct{background:#d9f7e1;border-color:#159447;color:#075e35}.option.correct .letter{background:#159447;color:#fff}.option.wrong{background:#ffe0e0;border-color:#e53935;color:#9c1818}.option.wrong .letter{background:#e53935;color:#fff}.option:disabled{cursor:not-allowed}
+.feedback{min-height:25px;font-size:14px;font-weight:600;margin:14px 0}.nav{display:flex;justify-content:flex-end;margin-top:12px}.next{background:#075e35;color:#fff}.next:disabled{opacity:.4;cursor:not-allowed}
+.result{text-align:center}.trophy{font-size:55px}.score{font-size:54px;font-weight:800;color:#159447}.resultbox{background:#f1f7f3;border-radius:15px;padding:15px;margin:20px 0}.small{font-size:12px;color:#718078}.danger{color:#b42318;font-weight:600}.success{color:#087a38;font-weight:600}
+@media(max-width:600px){.card{padding:20px;border-radius:18px}.info{grid-template-columns:1fr 1fr 1fr}.question{font-size:17px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand"><div class="logo">📖</div><div><h1>Evaluasi SMTPI</h1><div class="subtitle">Sub Jenjang Remaja I</div></div></div>
+</div></header>
+
+<main class="wrap">
+<section class="card" id="welcome">
+<h2 style="margin-top:0">Selamat Datang 👋</h2>
+<p>Selamat mengikuti <b>Evaluasi SMTPI Sub Jenjang Remaja I</b>. Kerjakan dengan teliti dan pilih jawaban yang paling tepat.</p>
+<div class="info"><div><b>15</b>Soal</div><div><b>A–D</b>Pilihan</div><div><b>100%</b>Otomatis</div></div>
+<label for="nama">Nama Lengkap</label><input id="nama" placeholder="Masukkan nama lengkap">
+<label for="kelas">Kelas / Rombel</label><input id="kelas" placeholder="Contoh: Remaja I">
+<button class="btn primary" onclick="begin()">Mulai Evaluasi 🚀</button>
+<p class="small">Jawaban yang sudah dipilih tidak dapat diubah. Tes hanya dapat dikerjakan satu kali pada browser ini.</p>
+</section>
+
+<section class="card hidden" id="quiz">
+<div class="topline"><b id="who"></b><span id="count"></span></div>
+<div class="progress"><i id="prog"></i></div>
+<div id="q"></div>
+<div class="feedback" id="feed"></div>
+<div class="nav"><button class="btn next" id="next" onclick="goNext()" disabled>Berikutnya →</button></div>
+</section>
+
+<section class="card hidden result" id="result">
+<div class="trophy">🏆</div><h2>Evaluasi Selesai!</h2>
+<p id="greet"></p><div class="score" id="score"></div>
+<div class="resultbox"><div id="detail"></div></div>
+<p id="remark"></p>
+<p class="small">Hasil ini ditampilkan setelah seluruh soal selesai. Tes tidak dapat diulang pada browser ini.</p>
+</section>
+</main>
+
+<script>
+const data=[
+["Apa arti pengakuan iman bagi remaja Kristen?","Pernyataan percaya kepada Allah Tritunggal."],
+["Mengapa kita percaya kepada Tritunggal?","Karena Tritunggal adalah sebutan bagi tiga pribadi Allah yang diakui dalam iman Kristen."],
+["Sikap apa yang menunjukkan bahwa seorang remaja hidup sesuai pengakuan iman?","Rajin beribadah, jujur, mengasihi sesama, dan membaca Alkitab."],
+["Mengapa GPM memiliki struktur pelayanan?","Agar pelayanan dapat berjalan tertib."],
+["Apa manfaat pembagian tugas dalam pelayanan?","Agar semua jemaat dapat terlayani dengan baik."],
+["Bagaimana sikap remaja terhadap pelayanan gereja?","Sebagai remaja kita dipanggil untuk mengenal struktur pelayanan, menghormati para pelayan, serta terlibat aktif dalam pelayanan gereja melalui semangat bersekutu, bersaksi, dan melayani."],
+["Apa yang dimaksud dengan moral kepemimpinan Kristen?","Sikap dan perilaku baik yang diwujudkan oleh seorang pemimpin dalam kehidupan sehari-hari."],
+["Apa yang dimaksud dengan etika kepemimpinan Kristen?","Pedoman nilai yang menuntun seorang pemimpin untuk bertindak sesuai dengan kehendak Tuhan."],
+["Sikap apa yang ditunjukkan Nehemia sebagai seorang pemimpin?","Jujur, bertanggung jawab, adil, menghargai pendapat, tidak pilih kasih, mau melayani, dan menjadi teladan."],
+["Apa arti meningkatkan kapasitas kepemimpinan?","Proses meningkatkan pengetahuan, keterampilan, karakter, iman, dan kemauan untuk melayani yang berjalan terus-menerus."],
+["Mengapa seorang pemimpin membutuhkan hikmat dari Tuhan?","Agar dapat menjalankan tugas dan tanggung jawabnya sebagai seorang pemimpin."],
+["Sebutkan 5 kapasitas pemimpin yang perlu dikembangkan oleh seorang pemimpin remaja.","Kemampuan, pengetahuan, keterampilan, karakter, dan sikap."],
+["Apa yang dimaksud dengan jiwa kewirausahaan?","Sikap dan kemampuan untuk melihat peluang, berani berusaha, kreatif, bekerja keras, dan mengembangkan sesuatu yang bermanfaat."],
+["Mengapa kerja keras penting dalam meningkatkan taraf hidup?","Karena meningkatkan taraf hidup membutuhkan usaha dan tanggung jawab."],
+["Sebutkan 5 sikap seorang wirausahawan Kristen.","Jujur, kreatif, kerja keras, bertanggung jawab, dan pantang menyerah."]
+];
+const allAnswers=data.map(x=>x[1]);
+let qs=[],idx=0,score=0,answered=false,name="";
+const KEY="smtpi_remaja1_modern_completed";
+function shuffle(a){return a.sort(()=>Math.random()-.5)}
+function options(correct){
+ let wrong=shuffle(allAnswers.filter(x=>x!==correct)).slice(0,3);
+ return shuffle([correct,...wrong]);
+}
+function begin(){
+ if(localStorage.getItem(KEY)){alert("Tes ini sudah pernah dikerjakan pada browser ini.");return}
+ name=document.getElementById("nama").value.trim();
+ if(!name){alert("Silakan masukkan nama lengkap terlebih dahulu.");return}
+ qs=shuffle(data.map(x=>({q:x[0],a:x[1],o:options(x[1])})));
+ idx=0;score=0;
+ document.getElementById("who").textContent=name;
+ document.getElementById("welcome").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ render();
+}
+function render(){
+ answered=false;let x=qs[idx];
+ document.getElementById("count").textContent=`${idx+1} / ${qs.length}`;
+ document.getElementById("prog").style.width=(idx/qs.length*100)+"%";
+ document.getElementById("next").disabled=true;
+ document.getElementById("next").textContent=idx===qs.length-1?"Lihat Hasil":"Berikutnya →";
+ document.getElementById("feed").textContent="";
+ let box=document.getElementById("q");
+ box.innerHTML=`<div class="question">${idx+1}. ${x.q}</div><div id="opts"></div>`;
+ ["A","B","C","D"].forEach((l,i)=>{
+   let b=document.createElement("button");b.className="option";
+   b.innerHTML=`<span class="letter">${l}</span><span>${x.o[i]}</span>`;
+   b.onclick=()=>pick(b,x.o[i],x.a);document.getElementById("opts").appendChild(b);
+ });
+}
+function pick(btn,val,correct){
+ if(answered)return;answered=true;
+ let bs=[...document.querySelectorAll(".option")];bs.forEach(x=>x.disabled=true);
+ if(val===correct){btn.classList.add("correct");score++;document.getElementById("feed").innerHTML='<span class="success">✓ Benar! Jawaban kamu tepat.</span>'}
+ else{
+   btn.classList.add("wrong");
+   let right=bs.find(x=>x.innerText.includes(correct));if(right)right.classList.add("correct");
+   document.getElementById("feed").innerHTML='<span class="danger">✗ Kurang tepat. Jawaban yang benar ditandai hijau.</span>';
+ }
+ document.getElementById("next").disabled=false;
+ document.getElementById("prog").style.width=((idx+1)/qs.length*100)+"%";
+}
+function goNext(){if(!answered)return;if(idx<qs.length-1){idx++;render()}else finish()}
+function finish(){
+ localStorage.setItem(KEY,"1");
+ let pct=Math.round(score/qs.length*100);
+ document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.remove("hidden");
+ document.getElementById("greet").textContent=`Terima kasih, ${name}!`;
+ document.getElementById("score").textContent=pct;
+ document.getElementById("detail").innerHTML=`<b>${score}</b> jawaban benar dari <b>${qs.length}</b> soal<br>Jawaban salah: <b>${qs.length-score}</b>`;
+ document.getElementById("remark").textContent=pct>=80?"🌟 Luar biasa! Terus bertumbuh dalam iman dan pengetahuan Alkitab.":pct>=60?"👍 Bagus! Tetap semangat belajar dan membaca Alkitab.":"💪 Tetap semangat! Pelajari kembali materi dan terus bertumbuh dalam iman.";
+}
+if(localStorage.getItem(KEY))document.getElementById("welcome").innerHTML='<div class="result"><div class="trophy">🔒</div><h2>Tes Sudah Selesai</h2><p>Tes Evaluasi SMTPI Remaja I sudah pernah dikerjakan pada browser ini dan tidak dapat diulang.</p></div>';
+</script>
+</body>
+</html>
